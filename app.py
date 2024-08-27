@@ -2,7 +2,6 @@ from flask import Flask, render_template, jsonify
 import pandas as pd
 from alpha_vantage.foreignexchange import ForeignExchange
 from alpha_vantage.techindicators import TechIndicators
-from waitress import serve
 
 app = Flask(__name__)
 
@@ -19,6 +18,7 @@ def get_realtime_data(from_currency, to_currency):
         data, _ = fx.get_currency_exchange_rate(from_currency=from_currency, to_currency=to_currency)
         return data
     except Exception as e:
+        print(f"Error fetching real-time data: {e}")
         return pd.DataFrame()
 
 # Fetch RSI data
@@ -29,6 +29,7 @@ def get_rsi_data(symbol, interval='daily', time_period=14, series_type='close'):
         rsi_data = rsi_data.dropna()
         return rsi_data
     except Exception as e:
+        print(f"Error fetching RSI data: {e}")
         return pd.DataFrame()
 
 # Route for the home page
@@ -57,5 +58,4 @@ def data():
         return jsonify({'error': 'Data not available'})
 
 if __name__ == '__main__':
-    # Use Waitress to serve the app in production
-    serve(app, host='0.0.0.0', port=8080)
+    app.run(debug=True)

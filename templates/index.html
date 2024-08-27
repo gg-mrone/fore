@@ -3,62 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forex Trading Dashboard</title>
+    <title>Forex Analysis</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             color: #333;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            width: 80%;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            border-radius: 8px;
             text-align: center;
+            padding: 20px;
         }
         h1 {
-            color: #007BFF;
+            color: #0275d8;
         }
-        .data {
-            margin-top: 20px;
-        }
-        .data p {
-            font-size: 1.2em;
+        .result {
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Forex Trading Dashboard</h1>
-        <div class="data" id="data">
-            <p>Loading...</p>
-        </div>
+    <h1>Forex Analysis</h1>
+    <div class="result">
+        <h2>Data:</h2>
+        <div id="data"></div>
     </div>
+
     <script>
-        async function fetchData() {
-            try {
-                const response = await fetch('/api/data');
-                const data = await response.json();
+        fetch('/api/data')
+            .then(response => response.json())
+            .then(data => {
                 if (data.error) {
-                    document.getElementById('data').innerHTML = `<p>${data.error}</p>`;
+                    document.getElementById('data').innerHTML = `<p>Error: ${data.error}</p>`;
                 } else {
                     document.getElementById('data').innerHTML = `
-                        <p>Exchange Rate: ${data.exchange_rate}</p>
+                        <p>Exchange Rate (EUR/USD): ${data.exchange_rate}</p>
                         <p>RSI Value: ${data.rsi_value}</p>
-                        <p>Trading Decision: ${data.decision}</p>
+                        <p>Decision: ${data.decision}</p>
                     `;
                 }
-            } catch (error) {
-                document.getElementById('data').innerHTML = `<p>Error fetching data: ${error.message}</p>`;
-            }
-        }
-
-        fetchData();
+            });
     </script>
 </body>
 </html>
