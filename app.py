@@ -2,6 +2,7 @@ from flask import Flask, render_template, jsonify
 import pandas as pd
 from alpha_vantage.foreignexchange import ForeignExchange
 from alpha_vantage.techindicators import TechIndicators
+from waitress import serve
 
 app = Flask(__name__)
 
@@ -56,4 +57,5 @@ def data():
         return jsonify({'error': 'Data not available'})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Use Waitress to serve the app in production
+    serve(app, host='0.0.0.0', port=8080)
